@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).parent
 SRC_PATH = BASE_DIR / "src"
 sys.path.insert(0, str(SRC_PATH))
 
-from rag_pipeline import RAGAssistant  # noqa: E402
+from rag_pipeline import RAGAssistant
 
 
 # PAGE CONFIG
