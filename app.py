@@ -94,6 +94,33 @@ if not st.session_state.ready:
     )
 
 else:
+        # PDF Upload section
+    with st.expander("Upload a new document"):
+        uploaded_file = st.file_uploader(
+            "Upload a PDF or TXT file",
+            type=["pdf", "txt"],
+        )
+        if uploaded_file:
+            from pathlib import Path
+            save_path = Path("data/sample_docs") / uploaded_file.name
+            save_path.write_bytes(uploaded_file.read())
+            st.success(f"Saved {uploaded_file.name}")
+
+            if st.button("Re-ingest with new document"):
+                with st.spinner("Re-ingesting all documents..."):
+                    try:
+                        import shutil
+                        shutil.rmtree("data/vectorstore", ignore_errors=True)
+                        assistant = RAGAssistant()
+                        n = assistant.ingest()
+                        assistant.setup_chain()
+                        st.session_state.assistant = assistant
+                        st.session_state.ready = True
+                        st.success(f"Done! Indexed {n} chunks.")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error: {e}")
+
     # Chat history display
     for msg in st.session_state.chat_history:
         with st.chat_message(msg["role"]):

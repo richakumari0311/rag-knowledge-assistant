@@ -21,6 +21,9 @@ from langchain_openai import OpenAIEmbeddings,ChatOpenAI
 
 load_dotenv()
 
+hf_token = os.getenv("HF_TOKEN")
+if hf_token:
+    os.environ["HUGGINGFACE_HUB_TOKEN"] = hf_token
 
 # LOAD DOCUMENTS
 def load_documents(data_dir: str):
@@ -95,29 +98,44 @@ def get_embeddings():
 
 # VECTOR STORE
 def build_vector_store(chunks, embeddings, persist_dir: str):
-    """Build and save FAISS vector store."""
+    """Build and save FAISS or ChromaDB vector store."""
+    backend = os.getenv("VECTOR_STORE", "faiss").lower()
     Path(persist_dir).mkdir(parents=True, exist_ok=True)
 
-    logger.info("Building FAISS vector store...")
-    vectorstore = FAISS.from_documents(chunks, embeddings)
-
-    save_path = os.path.join(persist_dir, "faiss_index")
-    vectorstore.save_local(save_path)
+    if backend == "chroma":
+        from langchain_community.vectorstores import Chroma
+        logger.info("Building ChromaDB vector store...")
+        vectorstore = Chroma.from_documents(
+            documents=chunks,
+            embedding=embeddings,
+            persist_directory=persist_dir,
+        )
+    else:
+        from langchain_community.vectorstores import FAISS
+        logger.info("Building FAISS vector store...")
+        vectorstore = FAISS.from_documents(chunks, embeddings)
+        vectorstore.save_local(os.path.join(persist_dir, "faiss_index"))
 
     logger.info(f"Saved to: {persist_dir}")
     return vectorstore
 
 
 def load_vector_store(embeddings, persist_dir: str):
-    """Load existing FAISS vector store."""
-    faiss_path = os.path.join(persist_dir, "faiss_index")
+    """Load existing FAISS or ChromaDB vector store."""
+    backend = os.getenv("VECTOR_STORE", "faiss").lower()
 
-    return FAISS.load_local(
-        faiss_path,
-        embeddings,
-        allow_dangerous_deserialization=True,
-    )
-
+    if backend == "chroma":
+        from langchain_community.vectorstores import Chroma
+        logger.info("Loading ChromaDB vector store...")
+        return Chroma(
+            persist_directory=persist_dir,
+            embedding_function=embeddings,
+        )
+    else:
+        from langchain_community.vectorstores import FAISS
+        logger.info("Loading FAISS vector store...")
+        faiss_path = os.path.join(persist_dir, "faiss_index")
+        return FAISS.load_local(faiss_path, embeddings, allow_dangerous_deserialization=True)
 
 # RAG CHAIN
 PROMPT_TEMPLATE = """You are a helpful assistant. Use the context below to answer the question.
