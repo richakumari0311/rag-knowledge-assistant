@@ -1,0 +1,73 @@
+Machine Learning Guide
+
+Machine learning (ML) is a subset of artificial intelligence that enables computers
+to learn from data without being explicitly programmed. Instead of following rigid
+rules, ML systems identify patterns and make decisions with minimal human intervention.
+
+Types of Machine Learning
+
+Supervised Learning
+In supervised learning, models are trained on labeled datasets. The algorithm learns
+the mapping between input features and output labels. Common examples include:
+- Linear Regression: predicts continuous values such as house prices
+- Logistic Regression: used for binary classification problems
+- Decision Trees: hierarchical rule-based classification
+- Neural Networks: deep learning for complex pattern recognition
+
+Unsupervised Learning
+Unsupervised learning finds hidden patterns in unlabeled data. Techniques include:
+- K-Means Clustering: groups data into K clusters
+- PCA (Principal Component Analysis): reduces the number of features in a dataset
+- Autoencoders: learn compact representations of data
+
+Reinforcement Learning
+An agent learns by interacting with an environment, receiving rewards for correct
+actions and penalties for wrong ones. Used in robotics, game playing, and
+autonomous vehicles.
+
+Key Concepts
+
+Overfitting: when a model memorizes training data but fails on new data.
+Solved by regularization, dropout, or collecting more training data.
+
+Underfitting: when a model is too simple to capture underlying patterns.
+Solved by using more complex models or adding more features.
+
+Cross-Validation: technique to assess model performance by splitting data
+into training, validation, and test sets.
+
+Gradient Descent: optimization algorithm that minimizes the loss function
+by iteratively adjusting model parameters.
+
+Neural Networks
+
+Neural networks are inspired by the human brain. They consist of:
+- Input Layer: receives raw data features
+- Hidden Layers: transform data through learned weights
+- Output Layer: produces final predictions
+- Activation Functions: ReLU, Sigmoid, Tanh introduce non-linearity
+
+Deep learning uses many hidden layers to learn hierarchical representations.
+CNNs work well for images. RNNs and Transformers handle sequential data like text.
+
+Evaluation Metrics
+
+For Classification:
+- Accuracy: correct predictions divided by total predictions
+- Precision: true positives divided by all predicted positives
+- Recall: true positives divided by all actual positives
+- F1 Score: harmonic mean of precision and recall
+
+For Regression:
+- MAE: Mean Absolute Error
+- MSE: Mean Squared Error
+- RMSE: Root Mean Squared Error
+- R-squared: proportion of variance explained by the model
+
+Popular ML Libraries in Python
+
+- scikit-learn: classical ML algorithms, preprocessing, evaluation
+- TensorFlow: deep learning framework by Google
+- PyTorch: deep learning framework by Meta, popular in research
+- XGBoost: gradient boosting, strong baseline for tabular data
+- Keras: high-level API for building neural networks
