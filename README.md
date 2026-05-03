@@ -156,3 +156,7 @@ is very small, but keep that in mind.
 | CHUNK_SIZE        | any number                | 1000          |
 | CHUNK_OVERLAP     | any number                | 200           |
 | TOP_K_RESULTS     | any number                | 4             |
+
+## Screenshots
+
+![RAG Knowledge Assistant](docs/screenshot.png)
