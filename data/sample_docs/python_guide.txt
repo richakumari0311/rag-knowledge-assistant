@@ -1,0 +1,29 @@
+Python Programming Guide
+
+Python is a high-level programming language created by Guido van Rossum in 1991.
+It is known for its simple, readable syntax and is widely used in data science,
+machine learning, and web development.
+
+Virtual Environments
+Always use virtual environments to isolate project dependencies.
+Create one with: python3 -m venv venv
+Activate it with: source venv/bin/activate
+
+Key Libraries
+- NumPy: Fast numerical computing with arrays
+- Pandas: Data manipulation and analysis
+- Matplotlib: Plotting and visualization
+- Streamlit: Build web apps with pure Python
+- LangChain: Build LLM-powered applications
+
+Package Management
+pip is Python's package manager.
+Install a package: pip install package_name
+Save dependencies: pip freeze > requirements.txt
+Install from file: pip install -r requirements.txt
+
+Best Practices
+Follow PEP 8 style guide for clean code.
+Use f-strings for string formatting.
+Write functions with clear names and docstrings.
+Always handle errors with try/except blocks.
