@@ -16,6 +16,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings
 
 
 load_dotenv()
@@ -76,16 +77,21 @@ def chunk_documents(docs):
 
 # EMBEDDINGS
 def get_embeddings():
-    """Return the embedding model."""
-    model = os.getenv("HF_EMBEDDING_MODEL", "all-MiniLM-L6-v2")
-    logger.info(f"Loading embedding model: {model}")
+    """Return the embedding model based on .env config."""
+    backend = os.getenv("EMBEDDING_BACKEND", "huggingface")
 
-    return HuggingFaceEmbeddings(
-        model_name=model,
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True},
-    )
+    if backend == "openai":
+        logger.info("Using OpenAI embeddings")
+        return OpenAIEmbeddings()
 
+    else:
+        model = os.getenv("HF_EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+        logger.info(f"Using HuggingFace embeddings: {model}")
+        return HuggingFaceEmbeddings(
+            model_name=model,
+            model_kwargs={"device": "cpu"},
+            encode_kwargs={"normalize_embeddings": True},
+        )
 
 # VECTOR STORE
 def build_vector_store(chunks, embeddings, persist_dir: str):
@@ -156,13 +162,18 @@ def build_rag_chain(vectorstore, llm):
 
 # LLM
 def get_llm():
-    """Return the LLM (Ollama by default — free and local)."""
-    model = os.getenv("OLLAMA_MODEL", "llama3.2")
-    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    """Return the LLM based on .env config."""
+    backend = os.getenv("LLM_BACKEND", "ollama")
 
-    logger.info(f"Using Ollama: {model}")
-    return OllamaLLM(model=model, base_url=base_url)
+    if backend == "openai":
+        logger.info("Using OpenAI LLM")
+        return ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
+    else:
+        model = os.getenv("OLLAMA_MODEL", "llama3.2")
+        base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        logger.info(f"Using Ollama: {model}")
+        return OllamaLLM(model=model, base_url=base_url)
 
 # MAIN ASSISTANT CLASS
 class RAGAssistant:
