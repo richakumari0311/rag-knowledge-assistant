@@ -159,4 +159,8 @@ is very small, but keep that in mind.
 
 ## Screenshots
 
-![RAG Knowledge Assistant](docs/screenshot.png)
+![Question about overfitting](docs/screenshot1.png)
+
+![Cross-document question](docs/screenshot2.png)
+
+
